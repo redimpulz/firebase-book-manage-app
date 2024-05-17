@@ -6,28 +6,51 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --accent-rgb: 214, 141, 152;
+  --button-image: linear-gradient(135deg, #fecfef 80%, #ff9ac1 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-rgb: 0, 0, 0;
+    --button-image: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   }
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+  background: rgb(var(--background-rgb));
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  a {
+    display: inline-block;
+    padding: 4px;
+    margin: 4px;
+    background-image: var(--button-image);
+    &::after {
+      content: '🔗';
+    }
+  }
+
+  button:not([disabled]) {
+    cursor: pointer;
+  }
+
+  form {
+    display: grid;
+    grid-row: 1;
+    label, button {
+      margin: 0.5rem 0;
+    }
+    button {
+      background-image: var(--button-image);
+      width: fit-content;
+      padding: 4px;
+    }
   }
 }
