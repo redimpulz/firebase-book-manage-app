@@ -27,7 +27,33 @@ Next.jsとfirebaseで作成しています。
 
 ## 開発のススメ
 
-First, run the development server:
+はじめに、`.env`ファイルを`.env.local`ファイルとしてコピーし、`.env.local`にfirebase configを設定します．
+
+```sh
+cp .env .env.local
+```
+
+```dotenv:.env.local
+FIREBASE_API_KEY=YourFirebaseAPIkey
+FIREBASE_PROJECT_ID=your-firebase-project-id
+FIREBASE_AUTH_DOMAIN=your-firebase-project-id.firebaseapp.com
+FIREBASE_STORAGE_BUCKET=your-firebase-project-id.appspot.com
+FIREBASE_APP_ID=your:firebase:app:id
+```
+
+次に、firebaseのエミュレータを起動します．
+
+```bash
+npm run dev:firebase
+# or
+yarn dev:firebase
+# or
+pnpm dev:firebase
+# or
+bun dev:firebase
+```
+
+Third, run the development server:
 
 ```bash
 npm run dev

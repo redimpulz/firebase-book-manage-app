@@ -1,6 +1,8 @@
 {
   "recommendations": [
     "dbaeumer.vscode-eslint",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "dotenv.dotenv-vscode",
+    "chflick.firecode"
   ]
 }
