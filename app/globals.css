@@ -4,10 +4,8 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --accent-rgb: 214, 141, 152;
-  --button-image: linear-gradient(135deg, #fecfef 80%, #ff9ac1 100%);
+  --background-rgb: 220, 255, 236;
+  --button-image: linear-gradient(135deg, #fecfef 0%, #f698bc 100%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,39 +16,72 @@
   }
 }
 
+.text-low-contrast {
+  @media (prefers-color-scheme: light) {
+    color: rgba(var(--foreground-rgb), 0.68);
+  }
+}
+
+.after\:link-icon {
+  &::after {
+    content: '🔗';
+  }
+}
+
+.after\:link-back-icon {
+  &::after {
+    content: '↩';
+  }
+}
+
+.bg-image-transparent {
+  background: transparent;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
 
-  h1 {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-  a {
-    display: inline-block;
-    padding: 4px;
-    margin: 4px;
+  header, footer {
     background-image: var(--button-image);
-    &::after {
-      content: '🔗';
+
+    a {
+      background: transparent;
+      &::after {
+        display: none;
+      }
+
+      @media (prefers-color-scheme: light) {
+        color: rgba(var(--foreground-rgb), 0.68);
+      }
     }
   }
 
-  button:not([disabled]) {
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+a {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 8px;
+  background-image: var(--button-image);
+}
+
+button {
+  width: fit-content;
+  border-radius: 8px;
+  padding: 8px;
+  font-weight: bold;
+  background-image: var(--button-image);
+
+  &:not([disabled]) {
     cursor: pointer;
   }
-
-  form {
-    display: grid;
-    grid-row: 1;
-    label, button {
-      margin: 0.5rem 0;
-    }
-    button {
-      background-image: var(--button-image);
-      width: fit-content;
-      padding: 4px;
-    }
+  &[disabled] {
+    cursor: default;
   }
 }

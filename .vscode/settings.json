@@ -1,8 +1,19 @@
 {
+  // ESLint
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
+
+  // TailwindCSS
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+
+  // TypeScript
   "typescript.tsdk": "node_modules/typescript/lib"
 }

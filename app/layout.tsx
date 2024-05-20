@@ -1,8 +1,6 @@
+import Link from 'next/link';
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Firebase Manage Book App",
@@ -16,7 +14,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={inter.className}>{children}</body>
+      <body className="min-h-dvh sm:text-2xl">
+        <header className="w-full">
+          <h1 className="font-bold text-xl sm:text-3xl">
+            <Link href="/">Firebase Book Manage App</Link>
+          </h1>
+        </header>
+        <main className="max-w-3xl mx-auto px-4 text-center">
+          {children}
+        </main>
+        <footer className="absolute bottom-0 w-full text-right p-2 text-sm">
+          © 2024, RedImpulz inc.
+        </footer>
+      </body>
     </html>
   );
 }

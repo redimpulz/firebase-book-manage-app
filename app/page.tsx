@@ -1,8 +1,10 @@
 'use client';
 import Link from "next/link";
 
-import { Book, BookWithID, getAllBooks, removeBook } from "./firebase";
+import { getAllBooks, removeBook, type Book } from "./firebase";
 import { useEffect, useState } from "react";
+
+type BookWithID = Book & { bookId: string };
 
 export default function Home() {
   const [bookList, setBookList] = useState<BookWithID[]>([]);
@@ -12,11 +14,10 @@ export default function Home() {
     const bookList: BookWithID[] = [];
     booksSnapshot?.forEach(bookDocument => {
       const book = bookDocument.data() as Book;
-      const bookWithID: BookWithID = {
+      bookList.push({
         bookId: bookDocument.id,
         ...book,
-      };
-      bookList.push(bookWithID);
+      });
     });
     setBookList(bookList);
   };
@@ -32,18 +33,22 @@ export default function Home() {
   }
 
   return (
-    <main>
-      <h1>蔵書一覧</h1>
-      <ul>
+    <>
+      <h2 className="my-6 sm:my-8 text-3xl sm:text-4xl font-bold">蔵書一覧</h2>
+      <ul className="grid gap-2 grid-cols-5">
         {bookList.map(book => (
-          <li key={book.bookId}>
-            <span>{book.title ? book.title : book.isbn}</span>
-            <Link href={`/book/${book.bookId}`}>詳しくみる</Link>
-            <button type="button" onClick={() => handleDelete(book)}>🗑️</button>
+          <li key={book.bookId} className="contents">
+            <span className="col-span-3">{book.title ? book.title : book.isbn}</span>
+            <Link href={`/book/${book.bookId}`}>詳細</Link>
+            <button
+              type="button"
+              onClick={() => handleDelete(book)}
+              className="bg-image-transparent"
+            >🗑️</button>
           </li>
         ))}
       </ul>
-      <p><Link href="/book/new">登録する</Link></p>
-    </main>
+      <p className="my-4"><Link href="/book/new">登録</Link></p>
+    </>
   );
 }

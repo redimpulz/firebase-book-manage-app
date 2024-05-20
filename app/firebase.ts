@@ -23,14 +23,10 @@ export type Book = {
   memo?: string;
 }
 
-export type BookWithID = Book & {
-  bookId: string;
-}
-
-const addBook = async (book: Book) => {
+const addBook = async (book: Readonly<Book>) => {
   try {
-    const docRef = await addDoc(booksCollection, book);
-    return docRef.id;
+    const bookId = (await addDoc(booksCollection, book)).id;
+    return bookId;
   } catch (e) {
     console.error('! Error adding document: ', e);
   }
@@ -40,7 +36,7 @@ const getBook = async (bookId: string) => {
   try {
     const querySnapshot = await getDoc(doc(firestore, 'books', bookId));
     if (querySnapshot.exists()){
-      return querySnapshot.data();
+      return querySnapshot.data() as Book;
     } else {
       console.error('! Error no such document!');
     }
@@ -58,7 +54,7 @@ const getAllBooks = async () => {
   }
 }
 
-const updateBook = async ({bookId, ...book}: BookWithID) => {
+const updateBook = async (bookId: string, book: Readonly<Partial<Book>>) => {
   try {
     await updateDoc(doc(firestore, 'books', bookId), book);
   } catch (e) {
