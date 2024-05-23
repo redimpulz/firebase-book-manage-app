@@ -1,29 +1,27 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
+import firebaseApp from './firebaseApp'
+import {
+  getFirestore,
+  collection,
+  doc,
+  addDoc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc
+} from "firebase/firestore";
+import { removeBookImage } from './storage';
 
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
-};
-
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Initialize Cloud Firestore and get a reference to the service
 const firestore = getFirestore(firebaseApp);
 const booksCollection = collection(firestore, '/books');
 
 export type Book = {
+  image?: string;
   isbn?: string;
   title: string;
   memo?: string;
 }
 
-const addBook = async (book: Readonly<Book>) => {
+export const addBook = async (book: Readonly<Book>) => {
   try {
     const bookId = (await addDoc(booksCollection, book)).id;
     return bookId;
@@ -32,7 +30,7 @@ const addBook = async (book: Readonly<Book>) => {
   }
 }
 
-const getBook = async (bookId: string) => {
+export const getBook = async (bookId: string) => {
   try {
     const querySnapshot = await getDoc(doc(firestore, 'books', bookId));
     if (querySnapshot.exists()){
@@ -45,7 +43,7 @@ const getBook = async (bookId: string) => {
   }
 }
 
-const getAllBooks = async () => {
+export const getAllBooks = async () => {
   try {
     const querySnapshot = await getDocs(booksCollection);
     return querySnapshot;
@@ -54,7 +52,7 @@ const getAllBooks = async () => {
   }
 }
 
-const updateBook = async (bookId: string, book: Readonly<Partial<Book>>) => {
+export const updateBook = async (bookId: string, book: Partial<Book>) => {
   try {
     await updateDoc(doc(firestore, 'books', bookId), book);
   } catch (e) {
@@ -62,12 +60,11 @@ const updateBook = async (bookId: string, book: Readonly<Partial<Book>>) => {
   }
 }
 
-const removeBook = async (bookId: string) => {
+export const removeBook = async (bookId: string, book: Readonly<Book>) => {
   try {
+    if (book.image) await removeBookImage(book.image);
     await deleteDoc(doc(firestore, 'books', bookId));
   } catch (e) {
     console.error('! Error deleting document: ', e);
   }
 }
-
-export { firebaseApp, firestore, addBook, getBook, getAllBooks, updateBook, removeBook };

@@ -3,85 +3,60 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
+  --foreground-rgb: 44, 51, 47;
   --background-rgb: 220, 255, 236;
-  --button-image: linear-gradient(135deg, #fecfef 0%, #f698bc 100%);
+  --accent-foreground-rgba: var(--foreground-rgb), 0.85;
+  --accent-background-image: linear-gradient(135deg, #fecfef 0%, #f698bc 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-rgb: 0, 0, 0;
-    --button-image: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    --accent-foreground-rgba: var(--foreground-rgb), 1;
+    --accent-background-image: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   }
-}
-
-.text-low-contrast {
-  @media (prefers-color-scheme: light) {
-    color: rgba(var(--foreground-rgb), 0.68);
-  }
-}
-
-.after\:link-icon {
-  &::after {
-    content: '🔗';
-  }
-}
-
-.after\:link-back-icon {
-  &::after {
-    content: '↩';
-  }
-}
-
-.bg-image-transparent {
-  background: transparent;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+}
 
-  header, footer {
-    background-image: var(--button-image);
+header, footer {
+  background-image: var(--accent-background-image);
+  color: rgba(var(--accent-foreground-rgba));
 
-    a {
-      background: transparent;
-      &::after {
-        display: none;
-      }
+  a {
+    background: transparent;
+  }
+}
 
-      @media (prefers-color-scheme: light) {
-        color: rgba(var(--foreground-rgb), 0.68);
-      }
+input, textarea {
+  @media (prefers-color-scheme: dark) {
+    background: rgb(var(--foreground-rgb));
+    color: rgb(var(--background-rgb));
+  }
+}
+
+input[type="file"] {
+  background: transparent;
+  color: rgb(var(--foreground-rgb));
+}
+
+@layer components {
+  .button-center {
+    @apply inline-block max-w-80 mx-auto p-2 sm:px-4 rounded-lg border-none;
+    @apply font-medium;
+    @apply cursor-pointer disabled:cursor-default hover:scale-105;
+    background-image: var(--accent-background-image);
+    color: rgba(var(--accent-foreground-rgba));
+  }
+
+  .button-back {
+    @apply text-base sm:text-lg hover:underline;
+    &::after {
+      content: '↩';
     }
-  }
-
-}
-
-h1 {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-a {
-  display: inline-block;
-  border-radius: 8px;
-  padding: 8px;
-  background-image: var(--button-image);
-}
-
-button {
-  width: fit-content;
-  border-radius: 8px;
-  padding: 8px;
-  font-weight: bold;
-  background-image: var(--button-image);
-
-  &:not([disabled]) {
-    cursor: pointer;
-  }
-  &[disabled] {
-    cursor: default;
   }
 }

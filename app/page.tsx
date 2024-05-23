@@ -1,8 +1,7 @@
 'use client';
 import Link from "next/link";
-
-import { getAllBooks, removeBook, type Book } from "./firebase";
 import { useEffect, useState } from "react";
+import { getAllBooks, removeBook, type Book } from "@/firebase/firestore";
 
 type BookWithID = Book & { bookId: string };
 
@@ -26,7 +25,7 @@ export default function Home() {
 
   const handleDelete = async (book: BookWithID) => {
     if (window.confirm(`『${book.title}』を本当に削除しますか？`)) {
-      await removeBook(book.bookId);
+      await removeBook(book.bookId, book);
       await getBooks();
     }
     return;
@@ -34,21 +33,31 @@ export default function Home() {
 
   return (
     <>
-      <h2 className="my-6 sm:my-8 text-3xl sm:text-4xl font-bold">蔵書一覧</h2>
-      <ul className="grid gap-2 grid-cols-5">
+      <h2 className="mt-6 sm:mt-8 text-3xl sm:text-4xl font-bold">蔵書一覧</h2>
+      <ul className="grid gap-y-2 sm:gap-x-4 grid-cols-5 my-6 sm:my-12">
         {bookList.map(book => (
           <li key={book.bookId} className="contents">
-            <span className="col-span-3">{book.title ? book.title : book.isbn}</span>
-            <Link href={`/book/${book.bookId}`}>詳細</Link>
+            <span className="col-span-3">
+              {book.title ? book.title : book.isbn}
+            </span>
+            <span className="w-fit ml-auto">
+              <Link href={`/book/${book.bookId}`} className="button-center">
+                詳細
+              </Link>
+            </span>
             <button
               type="button"
               onClick={() => handleDelete(book)}
-              className="bg-image-transparent"
-            >🗑️</button>
+              className="text-left"
+            >
+              🗑️
+            </button>
           </li>
         ))}
       </ul>
-      <p className="my-4"><Link href="/book/new">登録</Link></p>
+      <p className="text-center">
+        <Link href="/book/new" className="button-center">本を追加</Link>
+      </p>
     </>
   );
 }
