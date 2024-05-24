@@ -115,8 +115,8 @@ export default function BookForm(props: Readonly<Props>) {
           onChange={e => setISBN(e.target.value)}
           className="col-span-4 rounded-lg ps-1"
         />
-        <label htmlFor="title" className="text-right">タイトル</label>
 
+        <label htmlFor="title" className="text-right">タイトル</label>
         <input
           id="title"
           type="text"

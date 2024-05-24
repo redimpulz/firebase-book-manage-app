@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from "next";
 import "./globals.css";
+import LogoutButton from '@/components/LogoutButton';
 
 export const metadata: Metadata = {
   title: "Firebase Manage Book App",
@@ -15,12 +16,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="min-h-dvh sm:text-2xl">
-        <header className="w-full">
+        <header className="w-full inline-grid grid-flow-col place-content-between">
           <h1 className="font-bold text-xl sm:text-3xl">
             <Link href="/" className="inline-block p-2">
               Firebase Book Manage App
             </Link>
           </h1>
+          <LogoutButton />
         </header>
         <main className="max-w-3xl mx-auto px-2 text-center">
           {children}
