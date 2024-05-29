@@ -1,7 +1,7 @@
 'use client';
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { onLoginUserChanged, logoutUser } from "@/firebase/authentication";
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { onLoginUserChanged, logoutUser } from '@/firebase/authentication';
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -14,15 +14,15 @@ export default function LogoutButton() {
 
   const handleLogout = () => {
     logoutUser().then(() => router.push('/login'));
-  }
+  };
 
   return (
     <>
-      {isLogin &&
+      {isLogin && (
         <button onClick={handleLogout} className="text-base sm:text-xl p-2">
           ログアウト
         </button>
-      }
+      )}
     </>
   );
 }

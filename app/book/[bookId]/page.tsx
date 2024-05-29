@@ -1,29 +1,28 @@
 'use client';
-import Link from "next/link";
-import { useState, useEffect } from "react";
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
-import { getBook, type Book } from "@/firebase/firestore";
-import { getBookImageURL } from "@/firebase/storage";
+import { getBook, type Book } from '@/firebase/firestore';
+import { getBookImageURL } from '@/firebase/storage';
 
-import BackHomeButton from "@/components/BackHomeButton";
-import BookImage from "@/components/BookImage";
+import BackHomeButton from '@/components/BackHomeButton';
+import BookImage from '@/components/BookImage';
 
-export default function BookDetail({params}: {params: {bookId: string}}) {
+export default function BookDetail({ params }: { params: { bookId: string } }) {
   const bookId = params.bookId;
   const [bookImage, setBookImage] = useState<string>('/200x283.png');
   const [bookTitle, setBookTitle] = useState<Book['title']>('タイトル未登録');
   const [bookISBN, setBookISBN] = useState<Book['isbn']>();
   const [bookMemo, setBookMemo] = useState<Book['memo']>();
 
-  useEffect(()=> {
+  useEffect(() => {
     getBook(bookId).then(book => {
       if (book) {
         if (book.title) setBookTitle(book.title);
         setBookISBN(book.isbn);
         setBookMemo(book.memo);
       }
-      getBookImageURL(book?.image)
-        .then(imageURL => setBookImage(imageURL));
+      getBookImageURL(book?.image).then(imageURL => setBookImage(imageURL));
     });
   }, [bookId]);
 

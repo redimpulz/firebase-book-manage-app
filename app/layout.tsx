@@ -1,18 +1,18 @@
 import Link from 'next/link';
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+
+import './globals.css';
+
 import LogoutButton from '@/components/LogoutButton';
 
 export const metadata: Metadata = {
-  title: "Firebase Manage Book App",
-  description: "FirebaseとNext.jsで作られた蔵書管理アプリ",
+  title: 'Firebase Manage Book App',
+  description: 'FirebaseとNext.jsで作られた蔵書管理アプリ'
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ja">
       <body className="min-h-dvh sm:text-2xl">
@@ -24,9 +24,9 @@ export default function RootLayout({
           </h1>
           <LogoutButton />
         </header>
-        <main className="max-w-3xl mx-auto px-2 text-center">
-          {children}
-        </main>
+
+        <main className="max-w-3xl mx-auto px-2 text-center">{children}</main>
+
         <footer className="absolute bottom-0 w-full text-sm">
           <ul className="inline-flex justify-between w-full">
             <li className="inline-block p-2">

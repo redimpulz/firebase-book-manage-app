@@ -1,4 +1,4 @@
-import firebaseApp from "./firebaseApp";
+import firebaseApp from './firebaseApp';
 import {
   getStorage,
   ref,
@@ -19,7 +19,7 @@ export const addBookImage = async (image: File) => {
   } catch (e) {
     console.error('! Error adding image: ', e);
   }
-}
+};
 
 export const getBookImageURL = async (imagePath?: string) => {
   if (!imagePath) return '/200x283.png';
@@ -30,7 +30,7 @@ export const getBookImageURL = async (imagePath?: string) => {
     console.error('! Error getting image URL: ', e);
     return '/200x283.png';
   }
-}
+};
 
 export const removeBookImage = async (imagePath: string) => {
   try {
@@ -38,4 +38,4 @@ export const removeBookImage = async (imagePath: string) => {
   } catch (e) {
     console.error('! Error deleting image: ', e);
   }
-}
+};

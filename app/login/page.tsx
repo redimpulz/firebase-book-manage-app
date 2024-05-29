@@ -1,12 +1,8 @@
 'use client';
-import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import {
-  createUser,
-  loginUser,
-  type AuthKey
-} from "@/firebase/authentication";
-import type { AuthError } from "firebase/auth";
+import { useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { createUser, loginUser, type AuthKey } from '@/firebase/authentication';
+import type { AuthError } from 'firebase/auth';
 
 export default function Login() {
   const router = useRouter();
@@ -20,7 +16,7 @@ export default function Login() {
 
     const authKey = {
       email: formValueEmail || '',
-      password: formValuePassword || '',
+      password: formValuePassword || ''
     } satisfies AuthKey;
 
     try {
@@ -61,13 +57,11 @@ export default function Login() {
         setError(message);
       }
     }
-  }
+  };
 
   return (
     <>
-      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">
-        ログイン
-      </h2>
+      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">ログイン</h2>
       <form
         onSubmit={handleLogin}
         className="grid grid-cols-2 gap-4 align-middle max-w-96 mx-auto text-2xl"
@@ -94,10 +88,7 @@ export default function Login() {
           className="col-span-2 rounded-lg ps-1 py-2"
         />
 
-        <button
-          type="submit"
-          className="button-center w-full"
-        >
+        <button type="submit" className="button-center w-full">
           ログイン
         </button>
 

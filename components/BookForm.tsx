@@ -1,27 +1,32 @@
 'use client';
-import { useRouter } from "next/navigation";
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 
-import { addBook, getBook, updateBook, type Book } from "@/firebase/firestore";
-import { addBookImage, getBookImageURL, removeBookImage } from "@/firebase/storage";
-import BookImage from "./BookImage";
+import { addBook, getBook, updateBook, type Book } from '@/firebase/firestore';
+import {
+  addBookImage,
+  getBookImageURL,
+  removeBookImage
+} from '@/firebase/storage';
+import BookImage from './BookImage';
 
 type RBook = Required<Book>;
 
-type Props = { type: 'new' } | { type: 'edit', bookId: string };
+type Props = { type: 'new' } | { type: 'edit'; bookId: string };
 
 export default function BookForm(props: Readonly<Props>) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formValueImage, setImage] = useState<File>();
-  const [formValueImageURL, setImageURL] = useState<RBook['image']>('/200x283.png');
+  const [formValueImageURL, setImageURL] =
+    useState<RBook['image']>('/200x283.png');
   const [formValueISBN, setISBN] = useState<RBook['isbn']>('');
   const [formValueTitle, setTitle] = useState<RBook['title']>('');
   const [formValueMemo, setMemo] = useState<RBook['memo']>('');
   const isNew = props.type === 'new';
 
   const [book, setBook] = useState<Book>();
-  useEffect(()=> {
+  useEffect(() => {
     if (props.type === 'edit') {
       getBook(props.bookId).then(book => {
         if (book) {
@@ -34,7 +39,7 @@ export default function BookForm(props: Readonly<Props>) {
         return;
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.type]);
 
   const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +50,7 @@ export default function BookForm(props: Readonly<Props>) {
       setImage(imageFile);
       setImageURL(URL.createObjectURL(imageFile));
     }
-  }
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -64,13 +69,14 @@ export default function BookForm(props: Readonly<Props>) {
         newBook.image = await addBookImage(formValueImage);
       }
       return newBook;
-    }
+    };
 
-    const newBookString = ` 書影: ${formValueImage?.name || '未登録'}\n`
-                        + ` ISBN: ${formValueISBN || '未登録'}\n`
-                        + ` タイトル: ${formValueTitle}\n`
-                        + ` メモ: ${formValueMemo || '未登録'}`;
-    
+    const newBookString =
+      ` 書影: ${formValueImage?.name || '未登録'}\n` +
+      ` ISBN: ${formValueISBN || '未登録'}\n` +
+      ` タイトル: ${formValueTitle}\n` +
+      ` メモ: ${formValueMemo || '未登録'}`;
+
     if (isNew) {
       if (window.confirm(`次の内容で登録しますか？\n${newBookString}`)) {
         const newBook = await getNewBook();
@@ -88,7 +94,7 @@ export default function BookForm(props: Readonly<Props>) {
     }
     setIsLoading(false);
     return;
-  }
+  };
 
   return (
     <>
@@ -97,7 +103,9 @@ export default function BookForm(props: Readonly<Props>) {
         className="grid grid-cols-5 gap-4 align-middle leading-relaxed"
       >
         <BookImage src={formValueImageURL} className="col-span-5" />
-        <label htmlFor="image" className="text-right">画像</label>
+        <label htmlFor="image" className="text-right">
+          画像
+        </label>
         <input
           name="image"
           type="file"
@@ -107,7 +115,9 @@ export default function BookForm(props: Readonly<Props>) {
           className="col-span-4 file:button-center file:py-0 file:sm:mx-1"
         />
 
-        <label htmlFor="isbn" className="text-right">ISBN</label>
+        <label htmlFor="isbn" className="text-right">
+          ISBN
+        </label>
         <input
           id="isbn"
           type="text"
@@ -116,7 +126,9 @@ export default function BookForm(props: Readonly<Props>) {
           className="col-span-4 rounded-lg ps-1"
         />
 
-        <label htmlFor="title" className="text-right">タイトル</label>
+        <label htmlFor="title" className="text-right">
+          タイトル
+        </label>
         <input
           id="title"
           type="text"
@@ -126,7 +138,9 @@ export default function BookForm(props: Readonly<Props>) {
           className="col-span-4 rounded-lg ps-1"
         />
 
-        <label htmlFor="memo" className="text-right">メモ</label>
+        <label htmlFor="memo" className="text-right">
+          メモ
+        </label>
         <textarea
           id="memo"
           value={formValueMemo}

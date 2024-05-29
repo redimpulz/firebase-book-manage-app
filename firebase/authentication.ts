@@ -1,3 +1,4 @@
+'use client';
 import firebaseApp from './firebaseApp';
 import {
   getAuth,
@@ -7,14 +8,14 @@ import {
   signOut,
   type AuthError,
   type NextOrObserver,
-  type User,
+  type User
 } from 'firebase/auth';
 
 const auth = getAuth(firebaseApp);
 
 export type AuthKey = Readonly<{
-  email: string,
-  password: string
+  email: string;
+  password: string;
 }>;
 
 export const createUser = async ({ email, password }: AuthKey) => {
@@ -36,9 +37,8 @@ export const loginUser = async ({ email, password }: AuthKey) => {
 
 export const getLoginUser = () => auth.currentUser;
 
-export const onLoginUserChanged = (
-  callback: NextOrObserver<User>
-) => onAuthStateChanged(auth, callback);
+export const onLoginUserChanged = (callback: NextOrObserver<User>) =>
+  onAuthStateChanged(auth, callback);
 
 export const logoutUser = async () => {
   try {

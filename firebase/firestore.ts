@@ -1,4 +1,4 @@
-import firebaseApp from './firebaseApp'
+import firebaseApp from './firebaseApp';
 import {
   getFirestore,
   collection,
@@ -8,7 +8,7 @@ import {
   getDocs,
   updateDoc,
   deleteDoc
-} from "firebase/firestore";
+} from 'firebase/firestore';
 import { removeBookImage } from './storage';
 
 const firestore = getFirestore(firebaseApp);
@@ -19,7 +19,7 @@ export type Book = {
   isbn?: string;
   title: string;
   memo?: string;
-}
+};
 
 export const addBook = async (book: Readonly<Book>) => {
   try {
@@ -28,12 +28,12 @@ export const addBook = async (book: Readonly<Book>) => {
   } catch (e) {
     console.error('! Error adding document: ', e);
   }
-}
+};
 
 export const getBook = async (bookId: string) => {
   try {
     const querySnapshot = await getDoc(doc(firestore, 'books', bookId));
-    if (querySnapshot.exists()){
+    if (querySnapshot.exists()) {
       return querySnapshot.data() as Book;
     } else {
       console.error('! Error no such document!');
@@ -41,7 +41,7 @@ export const getBook = async (bookId: string) => {
   } catch (e) {
     console.error('! Error getting document: ', e);
   }
-}
+};
 
 export const getAllBooks = async () => {
   try {
@@ -50,7 +50,7 @@ export const getAllBooks = async () => {
   } catch (e) {
     console.error('! Error getting documents: ', e);
   }
-}
+};
 
 export const updateBook = async (bookId: string, book: Partial<Book>) => {
   try {
@@ -58,7 +58,7 @@ export const updateBook = async (bookId: string, book: Partial<Book>) => {
   } catch (e) {
     console.error('! Error updating document: ', e);
   }
-}
+};
 
 export const removeBook = async (bookId: string, book: Readonly<Book>) => {
   try {
@@ -67,4 +67,4 @@ export const removeBook = async (bookId: string, book: Readonly<Book>) => {
   } catch (e) {
     console.error('! Error deleting document: ', e);
   }
-}
+};

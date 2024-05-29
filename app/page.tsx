@@ -1,27 +1,29 @@
 'use client';
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { getAllBooks, removeBook, type Book } from "@/firebase/firestore";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { getAllBooks, removeBook, type Book } from '@/firebase/firestore';
 
 type BookWithID = Book & { bookId: string };
 
 export default function Home() {
   const [bookList, setBookList] = useState<BookWithID[]>([]);
 
-  const getBooks = async ()=> {
+  const getBooks = async () => {
     const booksSnapshot = await getAllBooks();
     const bookList: BookWithID[] = [];
     booksSnapshot?.forEach(bookDocument => {
       const book = bookDocument.data() as Book;
       bookList.push({
         bookId: bookDocument.id,
-        ...book,
+        ...book
       });
     });
     setBookList(bookList);
   };
 
-  useEffect(() => {getBooks()}, []);
+  useEffect(() => {
+    getBooks();
+  }, []);
 
   const handleDelete = async (book: BookWithID) => {
     if (window.confirm(`『${book.title}』を本当に削除しますか？`)) {
@@ -29,7 +31,7 @@ export default function Home() {
       await getBooks();
     }
     return;
-  }
+  };
 
   return (
     <>
@@ -56,7 +58,9 @@ export default function Home() {
         ))}
       </ul>
       <p className="text-center">
-        <Link href="/book/new" className="button-center">本を追加</Link>
+        <Link href="/book/new" className="button-center">
+          本を追加
+        </Link>
       </p>
     </>
   );
