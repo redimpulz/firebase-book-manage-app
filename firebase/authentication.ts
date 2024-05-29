@@ -6,24 +6,22 @@ import {
   onAuthStateChanged,
   signOut,
   type AuthError,
+  type NextOrObserver,
+  type User,
 } from 'firebase/auth';
 
 const auth = getAuth(firebaseApp);
 
-type AuthKey = Readonly<{
+export type AuthKey = Readonly<{
   email: string,
   password: string
 }>;
-
-const errorFunction = ({ code, message }: Partial<AuthError>) => {
-  throw {code, message};
-}
 
 export const createUser = async ({ email, password }: AuthKey) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (e) {
-    errorFunction(e as AuthError);
+    throw e as AuthError;
   }
 };
 
@@ -32,19 +30,20 @@ export const loginUser = async ({ email, password }: AuthKey) => {
     signInWithEmailAndPassword(auth, email, password);
     return;
   } catch (e) {
-    errorFunction(e as AuthError);
+    throw e as AuthError;
   }
 };
 
-export const isLogin = () => {
-    console.log(auth.currentUser);
-  return !!auth.currentUser;
-}
+export const getLoginUser = () => auth.currentUser;
+
+export const onLoginUserChanged = (
+  callback: NextOrObserver<User>
+) => onAuthStateChanged(auth, callback);
 
 export const logoutUser = async () => {
   try {
     await signOut(auth);
   } catch (e) {
-    errorFunction(e as AuthError);
+    throw e as AuthError;
   }
 };
