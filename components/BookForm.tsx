@@ -112,7 +112,7 @@ export default function BookForm(props: Readonly<Props>) {
           accept="image/*"
           capture="environment"
           onChange={handleImageSelect}
-          className="col-span-4 file:button-center file:py-0 file:sm:mx-1"
+          className="col-span-4 file:button-center file:py-0 file:sm:mr-1"
         />
 
         <label htmlFor="isbn" className="text-right">
@@ -123,7 +123,7 @@ export default function BookForm(props: Readonly<Props>) {
           type="text"
           value={formValueISBN}
           onChange={e => setISBN(e.target.value)}
-          className="col-span-4 rounded-lg ps-1"
+          className="col-span-4"
         />
 
         <label htmlFor="title" className="text-right">
@@ -135,7 +135,7 @@ export default function BookForm(props: Readonly<Props>) {
           value={formValueTitle}
           onChange={e => setTitle(e.target.value)}
           required
-          className="col-span-4 rounded-lg ps-1"
+          className="col-span-4"
         />
 
         <label htmlFor="memo" className="text-right">
@@ -145,7 +145,7 @@ export default function BookForm(props: Readonly<Props>) {
           id="memo"
           value={formValueMemo}
           onChange={e => setMemo(e.target.value)}
-          className="col-span-4 rounded-lg ps-1"
+          className="col-span-4"
         />
 
         <button

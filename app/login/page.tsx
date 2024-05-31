@@ -35,7 +35,7 @@ export default function Login() {
       <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">ログイン</h2>
       <form
         onSubmit={handleLogin}
-        className="grid grid-cols-2 gap-4 align-middle max-w-96 mx-auto text-2xl"
+        className="grid grid-cols-2 gap-4 max-w-96 mx-auto text-2xl"
       >
         {error && <div className="text-red text-base">{error}</div>}
         <input
@@ -45,7 +45,7 @@ export default function Login() {
           value={formValueEmail}
           onChange={e => setFormValueEmail(e.target.value)}
           required
-          className="col-span-2 rounded-lg ps-1 py-2"
+          className="col-span-2 py-2"
         />
 
         <input
@@ -56,7 +56,7 @@ export default function Login() {
           onChange={e => setFormValuePassword(e.target.value)}
           minLength={8}
           required
-          className="col-span-2 rounded-lg ps-1 py-2"
+          className="col-span-2 py-2"
         />
 
         <button type="submit" className="button-center w-full">
