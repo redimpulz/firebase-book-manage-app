@@ -1,34 +1,51 @@
+'use client';
 import Link from 'next/link';
-import type { Metadata } from 'next';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { getLoginUser, onLoginUserChanged } from '@/firebase/authentication';
+import { AuthProvider } from '@/provider/AuthContext';
+import AppHeader from '@/components/AppHeader';
 
 import './globals.css';
-
-import { AuthProvider } from '@/components/AuthContext';
-import AuthButton from '@/components/AuthButton';
-
-export const metadata: Metadata = {
-  title: 'Firebase Manage Book App',
-  description: 'FirebaseとNext.jsで作られた蔵書管理アプリ'
-};
 
 export default function RootLayout({
   children
 }: Readonly<{ children: React.ReactNode }>) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isLogin, setIsLogin] = useState(!!getLoginUser());
+
+  useEffect(() => {
+    onLoginUserChanged(maybeUser => {
+      setIsLogin(!!maybeUser);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(pathname, isLogin);
+    if (!isLogin && pathname !== 'login' && pathname !== '/signup') {
+      router.push('/login');
+    }
+  }, [pathname, isLogin, router]);
+
   return (
     <html lang="ja">
+      <head>
+        <title>Firebase Manage Book App</title>
+        <meta
+          name="description"
+          content="FirebaseとNext.jsで作られた蔵書管理アプリ"
+        />
+      </head>
       <body className="min-h-dvh sm:text-2xl">
         <AuthProvider>
-          <header className="w-full inline-grid grid-flow-col place-content-between">
-            <h1 className="font-bold text-xl sm:text-3xl">
-              <Link href="/" className="inline-block p-2">
-                Firebase Book Manage App
-              </Link>
-            </h1>
-            <AuthButton />
-          </header>
-
-          <main className="max-w-3xl mx-auto px-2 text-center">{children}</main>
-
+          <AppHeader />
+          <main className="max-w-3xl mx-auto px-2 text-center">
+            {!isLogin && pathname !== '/login' && pathname !== '/signup'
+              ? 'loading...'
+              : children}
+          </main>
           <footer className="absolute bottom-0 w-full text-sm">
             <ul className="inline-flex justify-between w-full">
               <li className="inline-block p-2">

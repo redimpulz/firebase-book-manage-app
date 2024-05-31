@@ -61,4 +61,12 @@ input[type='file'] {
       content: '↩';
     }
   }
+
+  .button-link {
+    @apply text-center grid grid-flow-col place-content-center;
+    @apply hover:underline;
+    &::after {
+      content: '🔗';
+    }
+  }
 }

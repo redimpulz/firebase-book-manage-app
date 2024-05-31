@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useContext, useState, type FormEvent } from 'react';
-import { AuthContext } from '@/components/AuthContext';
+import { AuthContext } from '@/provider/AuthContext';
 import type { AuthError, AuthKey } from '@/firebase/authentication';
 
 export default function Login() {
@@ -62,8 +62,8 @@ export default function Login() {
         <button type="submit" className="button-center w-full">
           ログイン
         </button>
-        <Link href="/signup" className="w-full text-center">
-          新規登録🔗
+        <Link href="/signup" className="button-link">
+          新規登録
         </Link>
       </form>
     </>
