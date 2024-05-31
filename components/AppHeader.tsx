@@ -19,24 +19,11 @@ export default function AppHeader() {
           <span className="inline-block p-2">Firebase Book Manage App</span>
         )}
       </h1>
-      <div className="inline-grid grid-flow-col text-base sm:text-xl p-2">
-        {isLogin ? (
-          <button onClick={logout}>ログアウト</button>
-        ) : (
-          <>
-            {pathname !== '/login' && (
-              <Link href="/login" className="button-link after:hidden">
-                ログイン
-              </Link>
-            )}
-            {pathname !== '/signup' && (
-              <Link href="/signup" className="button-link after:hidden">
-                新規登録
-              </Link>
-            )}
-          </>
-        )}
-      </div>
+      {isLogin && (
+        <button onClick={logout} className="text-base sm:text-xl p-2">
+          ログアウト
+        </button>
+      )}
     </header>
   );
 }
