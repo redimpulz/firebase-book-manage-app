@@ -1,4 +1,3 @@
-'use client';
 import firebaseApp from './firebaseApp';
 import {
   getAuth,
@@ -6,12 +5,13 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  type AuthError,
   type NextOrObserver,
-  type User
+  type User,
+  type AuthError
 } from 'firebase/auth';
+export type { AuthError };
 
-const auth = getAuth(firebaseApp);
+export const auth = getAuth(firebaseApp);
 
 export type AuthKey = Readonly<{
   email: string;
@@ -20,30 +20,59 @@ export type AuthKey = Readonly<{
 
 export const createUser = async ({ email, password }: AuthKey) => {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return user;
   } catch (e) {
-    throw e as AuthError;
+    if (!(e instanceof Error)) throw { message: '不明なエラーです。' };
+
+    const { code } = e as AuthError;
+    switch (code) {
+      case 'auth/email-already-in-use':
+        e.message = 'このメールアドレスはすでに登録されています。';
+      case 'auth/invalid-email':
+        e.message = '有効なメールアドレスを入力してください。';
+      case 'auth/operation-not-allowed':
+        e.message = 'アカウント登録は許可されていません。';
+      case 'auth/weak-password':
+        e.message = 'パスワードが脆弱です。';
+      default:
+        break;
+    }
+    throw e;
   }
 };
 
 export const loginUser = async ({ email, password }: AuthKey) => {
   try {
-    signInWithEmailAndPassword(auth, email, password);
-    return;
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return user;
   } catch (e) {
-    throw e as AuthError;
+    if (!(e instanceof Error)) throw e;
+
+    const { code } = e as AuthError;
+    switch (code) {
+      case 'auth/invalid-email':
+        e.message = '有効なメールアドレスを入力してください。';
+      case 'auth/user-disabled':
+        e.message = 'このメールアドレスは使用できません。';
+      case 'auth/user-not-found':
+        e.message = 'このメールアドレスのユーザーは存在しません。';
+      case 'auth/wrong-password':
+        e.message = 'パスワードが間違っています。';
+      default:
+        break;
+    }
+    throw e;
   }
 };
 
 export const getLoginUser = () => auth.currentUser;
 
-export const onLoginUserChanged = (callback: NextOrObserver<User>) =>
-  onAuthStateChanged(auth, callback);
+export const onLoginUserChanged = (f: NextOrObserver<User>) =>
+  onAuthStateChanged(auth, f);
 
-export const logoutUser = async () => {
-  try {
-    await signOut(auth);
-  } catch (e) {
-    throw e as AuthError;
-  }
-};
+export const logoutUser = () => signOut(auth);

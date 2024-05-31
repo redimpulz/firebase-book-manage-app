@@ -5,14 +5,14 @@ import { useContext, useState, type FormEvent } from 'react';
 import { AuthContext } from '@/components/AuthContext';
 import type { AuthError, AuthKey } from '@/firebase/authentication';
 
-export default function Login() {
+export default function SignUp() {
   const router = useRouter();
-  const { login } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [formValueEmail, setFormValueEmail] = useState('');
   const [formValuePassword, setFormValuePassword] = useState('');
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
@@ -22,8 +22,10 @@ export default function Login() {
     } satisfies AuthKey;
 
     try {
-      await login(authKey);
-      window.alert('ログインに成功しました。蔵書一覧ページに移動します');
+      await signUp(authKey);
+      window.alert(
+        `${authKey.email} を登録しました。蔵書一覧ページに移動します。`
+      );
       router.push('/');
     } catch (e) {
       setError((e as AuthError).message);
@@ -32,9 +34,9 @@ export default function Login() {
 
   return (
     <>
-      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">ログイン</h2>
+      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">新規登録</h2>
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleSignUp}
         className="grid grid-cols-2 gap-4 align-middle max-w-96 mx-auto text-2xl"
       >
         {error && <div className="text-red text-base">{error}</div>}
@@ -60,10 +62,10 @@ export default function Login() {
         />
 
         <button type="submit" className="button-center w-full">
-          ログイン
+          新規登録
         </button>
-        <Link href="/signup" className="w-full text-center">
-          新規登録🔗
+        <Link href="/login" className="w-full text-center">
+          ログイン🔗
         </Link>
       </form>
     </>
