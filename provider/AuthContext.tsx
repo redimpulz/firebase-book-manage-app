@@ -1,68 +1,37 @@
 'use client';
 import { createContext, useEffect, useState, type ReactNode } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
-import {
-  createUser,
-  getLoginUser,
-  loginUser,
-  logoutUser,
-  onLoginUserChanged,
-  type AuthKey
-} from '@/firebase/authentication';
+import { auth } from '@/firebase/auth';
 
 type Value = {
-  isLogin: boolean;
-  signUp: (a: AuthKey) => Promise<void>;
-  login: (a: AuthKey) => Promise<void>;
-  logout: () => Promise<void>;
+  user: User | null;
 };
+
 const defaultValue: Value = {
-  isLogin: false,
-  signUp: async () => {},
-  login: async () => {},
-  logout: async () => {}
+  user: null
 };
 export const AuthContext = createContext<Value>(defaultValue);
 
-export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [isLogin, setIsLogin] = useState<Value['isLogin']>(!!getLoginUser());
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const { push } = useRouter();
+  const pathname = usePathname();
 
-  const signUp: Value['signUp'] = async authKey => {
-    try {
-      await createUser(authKey);
-      setIsLogin(true);
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  const login: Value['login'] = async authKey => {
-    try {
-      await loginUser(authKey);
-      setIsLogin(true);
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  const logout: Value['logout'] = async () => {
-    try {
-      await logoutUser();
-      setIsLogin(false);
-    } catch (e) {
-      throw e;
-    }
-  };
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onLoginUserChanged(maybeUser => {
-      setIsLogin(!!maybeUser);
-    });
+    onAuthStateChanged(auth, setUser);
   }, []);
 
+  useEffect(() => {
+    const isLogin = !!user;
+    if (!isLogin && pathname !== 'login' && pathname !== '/signup') {
+      push('/login');
+    }
+  }, [pathname, push, user]);
+
   return (
-    <AuthContext.Provider value={{ isLogin, signUp, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }

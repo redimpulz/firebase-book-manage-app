@@ -1,99 +1,93 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
-
-import { addBook, getBook, updateBook, type Book } from '@/firebase/firestore';
 import {
-  addBookImage,
-  getBookImageURL,
-  removeBookImage
-} from '@/firebase/storage';
+  useContext,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FormEvent
+} from 'react';
+
+import { addDoc, doc, collection, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+import { firestore } from '@/firebase/firestore';
+import { storage } from '@/firebase/storage';
+import { Book } from '@/types';
+
+import { AuthContext } from '@/provider/AuthContext';
+
 import BookImage from './BookImage';
 
-type RBook = Required<Book>;
+type Props = { book?: Book };
 
-type Props = { type: 'new' } | { type: 'edit'; bookId: string };
+export default function BookForm({ book }: Props) {
+  const { push } = useRouter();
 
-export default function BookForm(props: Readonly<Props>) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formValueImage, setImage] = useState<File>();
-  const [formValueImageURL, setImageURL] =
-    useState<RBook['image']>('/200x283.png');
-  const [formValueISBN, setISBN] = useState<RBook['isbn']>('');
-  const [formValueTitle, setTitle] = useState<RBook['title']>('');
-  const [formValueMemo, setMemo] = useState<RBook['memo']>('');
-  const isNew = props.type === 'new';
+  const { user } = useContext(AuthContext);
 
-  const [book, setBook] = useState<Book>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [image, setImage] = useState<File>();
+  const [imageUrl, setImageUrl] = useState('');
+  const [ISBN, setISBN] = useState('');
+  const [memo, setMemo] = useState('');
+
+  const isNew = !book;
+
   useEffect(() => {
-    if (props.type === 'edit') {
-      getBook(props.bookId).then(book => {
-        if (book) {
-          setBook(book as Book);
-          getBookImageURL(book.image).then(imageURL => setImageURL(imageURL));
-          setISBN(book.isbn || '');
-          setTitle(book.title || '');
-          setMemo(book.memo || '');
-        }
-        return;
-      });
+    if (book) {
+      setTitle(book.title);
+      setISBN(book.isbn || '');
+      setMemo(book.memo || '');
+      setImageUrl(book.image || '');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.type]);
+  }, [book]);
 
-  const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-
-    const imageFile = event.target.files ? event.target.files[0] : null;
+  const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const imageFile = e.target.files ? e.target.files[0] : null;
     if (imageFile) {
       setImage(imageFile);
-      setImageURL(URL.createObjectURL(imageFile));
+      setImageUrl(URL.createObjectURL(imageFile));
     }
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
-
-    const getNewBook = async () => {
-      const newBook: Book = {
-        image: book?.image,
-        isbn: formValueISBN,
-        title: formValueTitle,
-        memo: formValueMemo
-      };
-      if (formValueImage) {
-        // 古いほうは削除
-        if (typeof book?.image === 'string') await removeBookImage(book.image);
-        newBook.image = await addBookImage(formValueImage);
+    let uploadImageUrl = '';
+    let bookId = book?.id;
+    try {
+      if (image) {
+        const imagePath = `images/${Date.now()}`;
+        await uploadBytes(ref(storage, imagePath), image);
+        uploadImageUrl = await getDownloadURL(ref(storage, imagePath));
       }
-      return newBook;
-    };
-
-    const newBookString =
-      ` 書影: ${formValueImage?.name || '未登録'}\n` +
-      ` ISBN: ${formValueISBN || '未登録'}\n` +
-      ` タイトル: ${formValueTitle}\n` +
-      ` メモ: ${formValueMemo || '未登録'}`;
-
-    if (isNew) {
-      if (window.confirm(`次の内容で登録しますか？\n${newBookString}`)) {
-        const newBook = await getNewBook();
-        const newBookId = await addBook(newBook);
-        window.alert(`『${formValueTitle}』を登録しました。`);
-        router.push(`/book/${newBookId}`);
+      if (isNew) {
+        const doc = await addDoc(collection(firestore, 'books'), {
+          uid: user?.uid,
+          title: title,
+          image: uploadImageUrl,
+          isbn: ISBN,
+          memo: memo
+        });
+        bookId = doc.id;
+      } else {
+        await updateDoc(doc(firestore, 'books', book.id), {
+          title: title,
+          image: uploadImageUrl || book.image,
+          isbn: ISBN,
+          memo: memo
+        });
       }
-    } else {
-      if (window.confirm(`次の内容に更新しますか？\n${newBookString}`)) {
-        const newBook = await getNewBook();
-        await updateBook(props.bookId, newBook);
-        window.alert('編集内容を保存しました。');
-        router.push(`/book/${props.bookId}`);
-      }
+      setIsLoading(false);
+      window.alert('保存しました');
+      push(`/book/${bookId}`);
+    } catch (error) {
+      console.log(error);
     }
     setIsLoading(false);
-    return;
   };
 
   return (
@@ -102,7 +96,7 @@ export default function BookForm(props: Readonly<Props>) {
         onSubmit={handleSubmit}
         className="grid grid-cols-5 gap-4 align-middle leading-relaxed"
       >
-        <BookImage src={formValueImageURL} className="col-span-5" />
+        <BookImage src={imageUrl || '/200x283.png'} className="col-span-5" />
         <label htmlFor="image" className="text-right">
           画像
         </label>
@@ -110,20 +104,8 @@ export default function BookForm(props: Readonly<Props>) {
           name="image"
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleImageSelect}
           className="col-span-4 file:button-center file:py-0 file:sm:mr-1"
-        />
-
-        <label htmlFor="isbn" className="text-right">
-          ISBN
-        </label>
-        <input
-          id="isbn"
-          type="text"
-          value={formValueISBN}
-          onChange={e => setISBN(e.target.value)}
-          className="col-span-4"
         />
 
         <label htmlFor="title" className="text-right">
@@ -132,9 +114,20 @@ export default function BookForm(props: Readonly<Props>) {
         <input
           id="title"
           type="text"
-          value={formValueTitle}
+          value={title}
           onChange={e => setTitle(e.target.value)}
           required
+          className="col-span-4"
+        />
+
+        <label htmlFor="isbn" className="text-right">
+          ISBN
+        </label>
+        <input
+          id="isbn"
+          type="text"
+          value={ISBN}
+          onChange={e => setISBN(e.target.value)}
           className="col-span-4"
         />
 
@@ -143,7 +136,7 @@ export default function BookForm(props: Readonly<Props>) {
         </label>
         <textarea
           id="memo"
-          value={formValueMemo}
+          value={memo}
           onChange={e => setMemo(e.target.value)}
           className="col-span-4"
         />

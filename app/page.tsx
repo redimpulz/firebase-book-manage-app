@@ -1,55 +1,72 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { getAllBooks, removeBook, type Book } from '@/firebase/firestore';
+import { useContext, useEffect, useState } from 'react';
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  where
+} from 'firebase/firestore';
 
-type BookWithID = Book & { bookId: string };
+import { firestore } from '@/firebase/firestore';
+import { Book } from '@/types';
+import { AuthContext } from '@/provider/AuthContext';
 
-export default function Home() {
-  const [bookList, setBookList] = useState<BookWithID[]>([]);
+export default function Page() {
+  const [books, setBooks] = useState<Book[]>([]);
+
+  const { user } = useContext(AuthContext);
 
   const getBooks = async () => {
-    const booksSnapshot = await getAllBooks();
-    const bookList: BookWithID[] = [];
-    booksSnapshot?.forEach(bookDocument => {
-      const book = bookDocument.data() as Book;
-      bookList.push({
-        bookId: bookDocument.id,
-        ...book
-      });
-    });
-    setBookList(bookList);
+    try {
+      const q = query(
+        collection(firestore, 'books'),
+        where('uid', '==', user?.uid)
+      );
+      const snapShot = await getDocs(q);
+      const data = snapShot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      })) as Book[];
+      setBooks(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     getBooks();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid]);
 
-  const handleDelete = async (book: BookWithID) => {
-    if (window.confirm(`『${book.title}』を本当に削除しますか？`)) {
-      await removeBook(book.bookId, book);
-      await getBooks();
+  const handleDelete = async (book: Book) => {
+    try {
+      if (window.confirm(`「${book.title}」を削除しますか？`)) {
+        await deleteDoc(doc(firestore, 'books', book.id));
+        await getBooks();
+      }
+    } catch (error) {
+      console.error(error);
     }
-    return;
   };
 
   return (
     <>
       <h2 className="mt-6 sm:mt-8 text-3xl sm:text-4xl font-bold">蔵書一覧</h2>
       <ul className="grid gap-y-2 sm:gap-x-4 grid-cols-5 my-6 sm:my-12">
-        {bookList.map(book => (
-          <li key={book.bookId} className="contents">
-            <span className="col-span-3">
-              {book.title ? book.title : book.isbn}
-            </span>
+        {books.map(x => (
+          <li key={x.id} className="contents">
+            <span className="col-span-3">{x.title ? x.title : x.isbn}</span>
             <span className="w-fit ml-auto">
-              <Link href={`/book/${book.bookId}`} className="button-center">
+              <Link href={`/book/${x.id}`} className="button-center">
                 詳細
               </Link>
             </span>
             <button
               type="button"
-              onClick={() => handleDelete(book)}
+              onClick={() => handleDelete(x)}
               className="text-left"
             >
               🗑️

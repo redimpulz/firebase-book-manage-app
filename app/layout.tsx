@@ -1,9 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
-import { getLoginUser, onLoginUserChanged } from '@/firebase/authentication';
 import { AuthProvider } from '@/provider/AuthContext';
 import AppHeader from '@/components/AppHeader';
 
@@ -11,24 +8,9 @@ import './globals.css';
 
 export default function RootLayout({
   children
-}: Readonly<{ children: React.ReactNode }>) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isLogin, setIsLogin] = useState(!!getLoginUser());
-
-  useEffect(() => {
-    onLoginUserChanged(maybeUser => {
-      setIsLogin(!!maybeUser);
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(pathname, isLogin);
-    if (!isLogin && pathname !== 'login' && pathname !== '/signup') {
-      router.push('/login');
-    }
-  }, [pathname, isLogin, router]);
-
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ja">
       <head>
@@ -41,11 +23,7 @@ export default function RootLayout({
       <body className="min-h-dvh sm:text-2xl">
         <AuthProvider>
           <AppHeader />
-          <main className="max-w-3xl mx-auto px-2 text-center">
-            {!isLogin && pathname !== '/login' && pathname !== '/signup'
-              ? 'loading...'
-              : children}
-          </main>
+          <main className="max-w-3xl mx-auto px-2 text-center">{children}</main>
           <footer className="absolute bottom-0 w-full text-sm">
             <ul className="inline-flex justify-between w-full">
               <li className="inline-block p-2">
@@ -63,7 +41,7 @@ export default function RootLayout({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  RedImpulz inc.
+                  {` REDIMPULZ inc.`}
                 </Link>
               </li>
             </ul>

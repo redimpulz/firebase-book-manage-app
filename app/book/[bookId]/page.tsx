@@ -1,42 +1,44 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { getDoc, doc } from 'firebase/firestore';
 
-import { getBook, type Book } from '@/firebase/firestore';
-import { getBookImageURL } from '@/firebase/storage';
+import { firestore } from '@/firebase/firestore';
+import { Book } from '@/types';
 
 import BackHomeButton from '@/components/BackHomeButton';
 import BookImage from '@/components/BookImage';
 
-export default function BookDetail({ params }: { params: { bookId: string } }) {
-  const bookId = params.bookId;
-  const [bookImage, setBookImage] = useState<string>('/200x283.png');
-  const [bookTitle, setBookTitle] = useState<Book['title']>('タイトル未登録');
-  const [bookISBN, setBookISBN] = useState<Book['isbn']>();
-  const [bookMemo, setBookMemo] = useState<Book['memo']>();
+export default function Page({ params }: { params: { bookId: string } }) {
+  const { bookId } = params;
+  const [book, setBook] = useState<Book>();
 
   useEffect(() => {
-    getBook(bookId).then(book => {
-      if (book) {
-        if (book.title) setBookTitle(book.title);
-        setBookISBN(book.isbn);
-        setBookMemo(book.memo);
+    const getBook = async () => {
+      try {
+        const snapShot = await getDoc(doc(firestore, 'books', bookId));
+        setBook({
+          id: bookId,
+          ...snapShot.data()
+        } as Book);
+      } catch (error) {
+        console.log(error);
       }
-      getBookImageURL(book?.image).then(imageURL => setBookImage(imageURL));
-    });
+    };
+    if (bookId) getBook();
   }, [bookId]);
 
   return (
     <>
       <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">
-        {bookTitle}
+        {book?.title}
       </h2>
-      <BookImage src={bookImage} />
+      <BookImage src={book?.image || '/200x283.png'} />
       <dl className="grid gap-y-4 gap-x-3 grid-cols-5 mt-4 mx-auto">
         <dt className="text-right font-semibold">ISBN</dt>
-        <dd className="text-justify col-span-4">{bookISBN}</dd>
+        <dd className="text-justify col-span-4">{book?.isbn || '-'}</dd>
         <dt className="text-right font-semibold">メモ</dt>
-        <dd className="text-justify col-span-4">{bookMemo}</dd>
+        <dd className="text-justify col-span-4">{book?.memo || '-'}</dd>
       </dl>
       <p className="my-6">
         <Link href={`/book/${bookId}/edit`} className="button-center">

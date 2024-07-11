@@ -1,32 +1,25 @@
 'use client';
+import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useContext, useState, type FormEvent } from 'react';
-import { AuthContext } from '@/provider/AuthContext';
-import type { AuthError, AuthKey } from '@/firebase/authentication';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
-export default function Login() {
-  const router = useRouter();
-  const { login } = useContext(AuthContext);
-  const [error, setError] = useState<string | null>(null);
-  const [formValueEmail, setFormValueEmail] = useState('');
-  const [formValuePassword, setFormValuePassword] = useState('');
+import { auth } from '@/firebase/auth';
+
+export default function Page() {
+  const { push } = useRouter();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-
-    const authKey = {
-      email: formValueEmail,
-      password: formValuePassword
-    } satisfies AuthKey;
-
     try {
-      await login(authKey);
-      window.alert('ログインに成功しました。蔵書一覧ページに移動します');
-      router.push('/');
-    } catch (e) {
-      setError((e as AuthError).message);
+      await signInWithEmailAndPassword(auth, email, password);
+      push('/');
+    } catch (error) {
+      console.log(error);
+      window.alert(error);
     }
   };
 
@@ -37,13 +30,12 @@ export default function Login() {
         onSubmit={handleLogin}
         className="grid grid-cols-2 gap-4 max-w-96 mx-auto text-2xl"
       >
-        {error && <div className="text-red text-base">{error}</div>}
         <input
           name="email"
           type="email"
           placeholder="メールアドレス"
-          value={formValueEmail}
-          onChange={e => setFormValueEmail(e.target.value)}
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           required
           className="col-span-2 py-2"
         />
@@ -52,8 +44,8 @@ export default function Login() {
           name="password"
           type="password"
           placeholder="パスワード"
-          value={formValuePassword}
-          onChange={e => setFormValuePassword(e.target.value)}
+          value={password}
+          onChange={e => setPassword(e.target.value)}
           minLength={8}
           required
           className="col-span-2 py-2"
