@@ -1,4 +1,3 @@
-'use client';
 import Link from 'next/link';
 import { useContext } from 'react';
 import { signOut } from 'firebase/auth';
