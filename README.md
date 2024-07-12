@@ -1,6 +1,6 @@
 # firebase-book-manage-app
 
-firebase-book-manage-appは自宅やサークルの部室、研究室などの蔵書が管理できるWebアプリです！
+firebase-book-manage-appは自宅やサークル、研究室などの蔵書が管理できるWebアプリです！
 Next.jsとfirebaseで作成しています。
 
 ## 機能一覧
