@@ -11,8 +11,7 @@ import {
 import { addDoc, doc, collection, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-import { firestore } from '@/firebase/firestore';
-import { storage } from '@/firebase/storage';
+import { firestore, storage } from '@/firebase';
 import { Book } from '@/types';
 
 import { AuthContext } from '@/provider/AuthContext';
