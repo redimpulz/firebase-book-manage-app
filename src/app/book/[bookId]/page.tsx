@@ -1,12 +1,11 @@
 'use client';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getDoc, doc } from 'firebase/firestore';
 
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
 
-import BackHomeButton from '@/components/BackHomeButton';
 import BookImage from '@/components/BookImage';
 
 export default function Page({ params }: { params: { bookId: string } }) {
@@ -46,7 +45,7 @@ export default function Page({ params }: { params: { bookId: string } }) {
         </Link>
       </p>
       <p className="my-6 text-right">
-        <BackHomeButton />
+        <Link href="/">一覧に戻る</Link>
       </p>
     </>
   );
