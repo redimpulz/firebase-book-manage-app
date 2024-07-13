@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getDoc, doc } from 'firebase/firestore';
 
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
 
 import BookForm from '@/components/BookForm';
-import BackHomeButton from '@/components/BackHomeButton';
 
 export default function Page({ params }: { params: { bookId: string } }) {
   const { bookId } = params;
@@ -32,7 +32,7 @@ export default function Page({ params }: { params: { bookId: string } }) {
       <h2 className="my-6 sm:my-8 text-3xl sm:text-4xl font-bold">本の編集</h2>
       <BookForm book={book} />
       <p className="my-6 text-right">
-        <BackHomeButton />
+        <Link href="/">一覧に戻る</Link>
       </p>
     </>
   );

@@ -37,7 +37,9 @@ export default function Page() {
   };
 
   useEffect(() => {
-    getBooks();
+    if (user?.uid) {
+      getBooks();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.uid]);
 

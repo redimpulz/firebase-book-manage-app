@@ -1,11 +1,5 @@
+import { useContext, useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  useContext,
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type FormEvent
-} from 'react';
 
 import { addDoc, doc, collection, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';

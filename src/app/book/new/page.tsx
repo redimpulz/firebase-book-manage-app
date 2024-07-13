@@ -1,6 +1,6 @@
 'use client';
+import Link from 'next/link';
 import BookForm from '@/components/BookForm';
-import BackHomeButton from '@/components/BackHomeButton';
 
 export default function Page() {
   return (
@@ -8,7 +8,7 @@ export default function Page() {
       <h2 className="my-6 sm:my-8 text-3xl sm:text-4xl font-bold">本の登録</h2>
       <BookForm />
       <p className="my-6 text-right">
-        <BackHomeButton />
+        <Link href="/">一覧に戻る</Link>
       </p>
     </>
   );
