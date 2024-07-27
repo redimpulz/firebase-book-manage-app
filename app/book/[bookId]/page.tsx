@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getDoc, doc } from 'firebase/firestore';
 
-import { firestore } from '@/firebase';
-import { Book } from '@/types';
+import { firestore } from '../../../firebase';
+import { Book } from '../../../types';
 
 import BookImage from '@/components/BookImage';
 

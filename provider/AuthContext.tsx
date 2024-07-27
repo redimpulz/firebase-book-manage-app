@@ -3,7 +3,7 @@ import { createContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
-import { auth } from '@/firebase';
+import { auth } from '../firebase';
 
 type Value = {
   user: User | null;
