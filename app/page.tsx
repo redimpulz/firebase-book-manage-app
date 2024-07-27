@@ -10,8 +10,8 @@ import {
   where
 } from 'firebase/firestore';
 
-import { firestore } from '@/firebase';
-import { Book } from '@/types';
+import { firestore } from '../firebase';
+import { Book } from '../types';
 import { AuthContext } from '@/provider/AuthContext';
 
 export default function Page() {

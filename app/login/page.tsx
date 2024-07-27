@@ -2,9 +2,9 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/firebase';
+import { auth } from '../../firebase';
 
 export default function Page() {
   const { push } = useRouter();
@@ -12,10 +12,10 @@ export default function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       push('/');
     } catch (error) {
       console.log(error);
@@ -25,9 +25,9 @@ export default function Page() {
 
   return (
     <>
-      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">新規登録</h2>
+      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">ログイン</h2>
       <form
-        onSubmit={handleSignUp}
+        onSubmit={handleLogin}
         className="grid grid-cols-2 gap-4 max-w-96 mx-auto text-2xl"
       >
         <input
@@ -51,11 +51,11 @@ export default function Page() {
           className="col-span-2 py-2"
         />
 
-        <button type="submit" className="w-full button-center">
-          新規登録
-        </button>
-        <Link href="/login" className="w-full button-link">
+        <button type="submit" className="button-center w-full">
           ログイン
+        </button>
+        <Link href="/signup" className="button-link">
+          新規登録
         </Link>
       </form>
     </>
