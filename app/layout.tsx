@@ -24,28 +24,6 @@ export default function RootLayout({
         <AuthProvider>
           <AppHeader />
           <main className="max-w-3xl mx-auto px-2 text-center">{children}</main>
-          <footer className="absolute bottom-0 w-full text-sm">
-            <ul className="inline-flex justify-between w-full">
-              <li className="inline-block p-2">
-                <Link
-                  href="https://github.com/redimpulz/firebase-book-manage-app"
-                  className="font-bold"
-                >
-                  GitHub Repo.
-                </Link>
-              </li>
-              <li className="inline-block p-2">
-                © 2024
-                <Link
-                  href="https://redimpulz.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {` REDIMPULZ inc.`}
-                </Link>
-              </li>
-            </ul>
-          </footer>
         </AuthProvider>
       </body>
     </html>
