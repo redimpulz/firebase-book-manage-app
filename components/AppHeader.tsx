@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { signOut } from 'firebase/auth';
 
 import { AuthContext } from '@/provider/AuthContext';
-import { auth } from '../firebase';
+import { auth } from '@/firebase';
 
 export default function AppHeader() {
   const { user } = useContext(AuthContext);
