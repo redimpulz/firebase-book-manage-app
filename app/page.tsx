@@ -12,19 +12,13 @@ import {
 
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
-import { AuthContext } from '@/provider/AuthContext';
 
 export default function Page() {
   const [books, setBooks] = useState<Book[]>([]);
 
-  const { user } = useContext(AuthContext);
-
   const getBooks = async () => {
     try {
-      const q = query(
-        collection(firestore, 'books'),
-        where('uid', '==', user?.uid)
-      );
+      const q = query(collection(firestore, 'books'));
       const snapShot = await getDocs(q);
       const data = snapShot.docs.map(doc => ({
         ...doc.data(),
@@ -37,11 +31,8 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (user?.uid) {
-      getBooks();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.uid]);
+    getBooks();
+  }, []);
 
   const handleDelete = async (book: Book) => {
     try {
@@ -56,30 +47,22 @@ export default function Page() {
 
   return (
     <>
-      <h2 className="mt-6 sm:mt-8 text-3xl sm:text-4xl font-bold">蔵書一覧</h2>
-      <ul className="grid gap-y-2 sm:gap-x-4 grid-cols-5 my-6 sm:my-12">
+      <h2>蔵書一覧</h2>
+      <ul>
         {books.map(x => (
-          <li key={x.id} className="contents">
-            <span className="col-span-3">{x.title ? x.title : x.isbn}</span>
-            <span className="w-fit ml-auto">
-              <Link href={`/book/${x.id}`} className="button-center">
-                詳細
-              </Link>
+          <li key={x.id}>
+            <span>{x.title ? x.title : x.isbn}</span>
+            <span>
+              <Link href={`/book/${x.id}`}>詳細</Link>
             </span>
-            <button
-              type="button"
-              onClick={() => handleDelete(x)}
-              className="text-left"
-            >
+            <button type="button" onClick={() => handleDelete(x)}>
               🗑️
             </button>
           </li>
         ))}
       </ul>
-      <p className="text-center">
-        <Link href="/book/new" className="button-center">
-          本を追加
-        </Link>
+      <p>
+        <Link href="/book/new">本を追加</Link>
       </p>
     </>
   );

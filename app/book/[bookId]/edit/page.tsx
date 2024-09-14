@@ -29,9 +29,9 @@ export default function Page({ params }: { params: { bookId: string } }) {
 
   return (
     <>
-      <h2 className="my-6 sm:my-8 text-3xl sm:text-4xl font-bold">本の編集</h2>
+      <h2>本の編集</h2>
       <BookForm book={book} />
-      <p className="my-6 text-right">
+      <p>
         <Link href="/">一覧に戻る</Link>
       </p>
     </>
