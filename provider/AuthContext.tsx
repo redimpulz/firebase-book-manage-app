@@ -12,6 +12,7 @@ type Value = {
 const defaultValue: Value = {
   user: null
 };
+
 export const AuthContext = createContext<Value>(defaultValue);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -19,17 +20,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    onAuthStateChanged(auth, setUser);
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    const isLogin = !!user;
-    if (!isLogin && pathname !== 'login' && pathname !== '/signup') {
-      push('/login');
+    if (!loading) {
+      const isLogin = !!user;
+      if (!isLogin && pathname !== '/login' && pathname !== '/signup') {
+        push('/login');
+      }
     }
-  }, [pathname, push, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, pathname, loading]);
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
