@@ -51,12 +51,13 @@ export default function Page() {
       <ul>
         {books.map(x => (
           <li key={x.id}>
-            <span>{x.title ? x.title : x.isbn}</span>
-            <span>
-              <Link href={`/book/${x.id}`}>詳細</Link>
-            </span>
+            <span>{x.title}</span>
+
+            <Link href={`/book/${x.id}`}>
+              <button>詳細</button>
+            </Link>
             <button type="button" onClick={() => handleDelete(x)}>
-              🗑️
+              削除
             </button>
           </li>
         ))}
