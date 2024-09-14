@@ -5,6 +5,7 @@ import { getDoc, doc } from 'firebase/firestore';
 
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
+import BookImage from '@/components/BookImage';
 
 export default function Page({ params }: { params: { bookId: string } }) {
   const { bookId } = params;
@@ -28,6 +29,7 @@ export default function Page({ params }: { params: { bookId: string } }) {
   return (
     <>
       <h2>{book?.title}</h2>
+      <BookImage src={book?.image || '/200x283.png'} />
       <dl>
         <dt>ISBN</dt>
         <dd>{book?.isbn || '-'}</dd>
