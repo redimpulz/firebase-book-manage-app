@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
 
 initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,3 +16,4 @@ initializeApp({
 
 export const firestore = getFirestore();
 export const storage = getStorage();
+export const auth = getAuth();

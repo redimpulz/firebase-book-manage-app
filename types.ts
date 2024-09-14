@@ -4,4 +4,5 @@ export type Book = {
   isbn?: string;
   memo?: string;
   image?: string;
+  uid: string;
 };

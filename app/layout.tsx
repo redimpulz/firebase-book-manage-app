@@ -1,6 +1,7 @@
 'use client';
 
 import AppHeader from '@/components/AppHeader';
+import { AuthProvider } from '@/provider/AuthContext';
 
 import './globals.css';
 
@@ -19,8 +20,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <AppHeader />
-        <main>{children}</main>
+        <AuthProvider>
+          <AppHeader />
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

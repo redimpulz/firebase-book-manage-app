@@ -1,10 +1,11 @@
-import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
+import { useContext, useEffect, useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { addDoc, doc, collection, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { firestore, storage } from '@/firebase';
+import { AuthContext } from '@/provider/AuthContext';
 import { Book } from '@/types';
 
 import BookImage from './BookImage';
@@ -13,6 +14,8 @@ type Props = { book?: Book };
 
 export default function BookForm({ book }: Props) {
   const { push } = useRouter();
+
+  const { user } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
@@ -58,7 +61,8 @@ export default function BookForm({ book }: Props) {
           title: title,
           isbn: ISBN,
           memo: memo,
-          image: uploadImageUrl
+          image: uploadImageUrl,
+          uid: user?.uid
         });
         bookId = doc.id;
       } else {

@@ -12,13 +12,19 @@ import {
 
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
+import { AuthContext } from '@/provider/AuthContext';
 
 export default function Page() {
   const [books, setBooks] = useState<Book[]>([]);
 
+  const { user } = useContext(AuthContext);
+
   const getBooks = async () => {
     try {
-      const q = query(collection(firestore, 'books'));
+      const q = query(
+        collection(firestore, 'books'),
+        where('uid', '==', user?.uid)
+      );
       const snapShot = await getDocs(q);
       const data = snapShot.docs.map(doc => ({
         ...doc.data(),
@@ -31,8 +37,9 @@ export default function Page() {
   };
 
   useEffect(() => {
-    getBooks();
-  }, []);
+    if (user?.uid) getBooks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid]);
 
   const handleDelete = async (book: Book) => {
     try {
