@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   collection,
   getDocs,
