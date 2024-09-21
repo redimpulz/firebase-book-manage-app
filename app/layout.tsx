@@ -1,5 +1,4 @@
 'use client';
-
 import AppHeader from '@/components/AppHeader';
 import { AuthProvider } from '@/provider/AuthContext';
 
