@@ -1,14 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  query,
-  where
-} from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, query } from 'firebase/firestore';
 
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
