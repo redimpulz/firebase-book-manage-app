@@ -25,11 +25,8 @@ export default function Page() {
 
   return (
     <>
-      <h2 className="text-3xl sm:text-4xl font-bold my-6 sm:my-8">ログイン</h2>
-      <form
-        onSubmit={handleLogin}
-        className="grid grid-cols-2 gap-4 max-w-96 mx-auto text-2xl"
-      >
+      <h2>ログイン</h2>
+      <form onSubmit={handleLogin} className="flex flex-col gap-1">
         <input
           name="email"
           type="email"
@@ -37,7 +34,6 @@ export default function Page() {
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
-          className="col-span-2 py-2"
         />
 
         <input
@@ -48,15 +44,10 @@ export default function Page() {
           onChange={e => setPassword(e.target.value)}
           minLength={8}
           required
-          className="col-span-2 py-2"
         />
 
-        <button type="submit" className="button-center w-full">
-          ログイン
-        </button>
-        <Link href="/signup" className="button-link">
-          新規登録
-        </Link>
+        <button type="submit">ログイン</button>
+        <Link href="/signup">新規登録</Link>
       </form>
     </>
   );

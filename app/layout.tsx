@@ -1,8 +1,6 @@
 'use client';
-import Link from 'next/link';
-
-import { AuthProvider } from '@/provider/AuthContext';
 import AppHeader from '@/components/AppHeader';
+import { AuthProvider } from '@/provider/AuthContext';
 
 import './globals.css';
 
@@ -20,10 +18,10 @@ export default function RootLayout({
           content="FirebaseとNext.jsで作られた蔵書管理アプリ"
         />
       </head>
-      <body className="min-h-dvh sm:text-2xl">
+      <body>
         <AuthProvider>
           <AppHeader />
-          <main className="max-w-3xl mx-auto px-2 text-center">{children}</main>
+          <main>{children}</main>
         </AuthProvider>
       </body>
     </html>

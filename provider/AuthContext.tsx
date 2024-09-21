@@ -41,6 +41,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, pathname, loading]);
 
+  console.log(user);
+
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );

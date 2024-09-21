@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   collection,
   getDocs,
@@ -37,9 +37,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (user?.uid) {
-      getBooks();
-    }
+    if (user?.uid) getBooks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.uid]);
 
@@ -56,30 +54,23 @@ export default function Page() {
 
   return (
     <>
-      <h2 className="mt-6 sm:mt-8 text-3xl sm:text-4xl font-bold">蔵書一覧</h2>
-      <ul className="grid gap-y-2 sm:gap-x-4 grid-cols-5 my-6 sm:my-12">
+      <h2>蔵書一覧</h2>
+      <ul>
         {books.map(x => (
-          <li key={x.id} className="contents">
-            <span className="col-span-3">{x.title ? x.title : x.isbn}</span>
-            <span className="w-fit ml-auto">
-              <Link href={`/book/${x.id}`} className="button-center">
-                詳細
-              </Link>
-            </span>
-            <button
-              type="button"
-              onClick={() => handleDelete(x)}
-              className="text-left"
-            >
-              🗑️
+          <li key={x.id}>
+            <span>{x.title}</span>
+
+            <Link href={`/book/${x.id}`}>
+              <button>詳細</button>
+            </Link>
+            <button type="button" onClick={() => handleDelete(x)}>
+              削除
             </button>
           </li>
         ))}
       </ul>
-      <p className="text-center">
-        <Link href="/book/new" className="button-center">
-          本を追加
-        </Link>
+      <p>
+        <Link href="/book/new">本を追加</Link>
       </p>
     </>
   );

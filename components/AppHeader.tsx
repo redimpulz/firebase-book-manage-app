@@ -8,16 +8,13 @@ import { auth } from '@/firebase';
 export default function AppHeader() {
   const { user } = useContext(AuthContext);
   const isLogin = !!user;
-
   return (
-    <header className="w-full inline-grid grid-flow-col place-content-between">
-      <h1 className="font-bold text-xl sm:text-3xl">
-        <Link href="/" className="inline-block p-2">
-          Firebase Book Manage App
-        </Link>
+    <header>
+      <h1>
+        <Link href="/">Firebase Book Manage App</Link>
       </h1>
       {isLogin && (
-        <div className="text-base sm:text-xl p-2">
+        <div>
           {user.email}
           {` / `}
           <button onClick={() => signOut(auth)}>ログアウト</button>
