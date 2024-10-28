@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase';
 
+import Button from '@/components/Button';
+
 export default function Page() {
   const { push } = useRouter();
 
@@ -46,7 +48,7 @@ export default function Page() {
           required
         />
 
-        <button type="submit">新規登録</button>
+        <Button buttonText='新規登録'></Button>
         <Link href="/login">ログイン</Link>
       </form>
     </>

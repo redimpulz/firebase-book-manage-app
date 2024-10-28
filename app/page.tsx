@@ -14,6 +14,8 @@ import { firestore } from '@/firebase';
 import { Book } from '@/types';
 import { AuthContext } from '@/provider/AuthContext';
 
+import Button from '@/components/Button';
+
 export default function Page() {
   const [books, setBooks] = useState<Book[]>([]);
 
@@ -57,15 +59,12 @@ export default function Page() {
       <h2>蔵書一覧</h2>
       <ul>
         {books.map(x => (
-          <li key={x.id}>
-            <span>{x.title}</span>
-
+          <li key={x.id} className='flex items-center py-2'>
+            <span className='mr-2'>{x.title}</span>
             <Link href={`/book/${x.id}`}>
-              <button>詳細</button>
+              <Button buttonText='詳細'/>
             </Link>
-            <button type="button" onClick={() => handleDelete(x)}>
-              削除
-            </button>
+        <Button buttonText='削除' handleClick={()=>handleDelete(x)}/>
           </li>
         ))}
       </ul>

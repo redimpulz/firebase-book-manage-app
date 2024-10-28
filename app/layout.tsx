@@ -18,7 +18,7 @@ export default function RootLayout({
           content="FirebaseとNext.jsで作られた蔵書管理アプリ"
         />
       </head>
-      <body>
+      <body className="container mx-auto px-4">
         <AuthProvider>
           <AppHeader />
           <main>{children}</main>

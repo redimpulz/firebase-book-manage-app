@@ -6,6 +6,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import { auth } from '@/firebase';
 
+import Button from '@/components/Button';
+
 export default function Page() {
   const { push } = useRouter();
 
@@ -25,30 +27,34 @@ export default function Page() {
 
   return (
     <>
-      <h2>ログイン</h2>
-      <form onSubmit={handleLogin} className="flex flex-col gap-1">
-        <input
-          name="email"
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+      <h2 className="text-center">ログイン</h2>
+  
+        <form onSubmit={handleLogin} className="mx-auto w-1/2">
+          <input
+            name="email"
+            type="email"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="w-full mb-2"
+            required
+          />
+  
+          <input
+            name="password"
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            minLength={8}
+            className="w-full mb-2"
+            required
+          />
+  
+          <Button buttonText = 'ログイン'/>
+        </form>
+        <Link href="/signup" className="block text-center mt-2">新規登録</Link>
 
-        <input
-          name="password"
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          minLength={8}
-          required
-        />
-
-        <button type="submit">ログイン</button>
-        <Link href="/signup">新規登録</Link>
-      </form>
     </>
   );
 }

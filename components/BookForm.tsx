@@ -9,6 +9,7 @@ import { AuthContext } from '@/provider/AuthContext';
 import { Book } from '@/types';
 
 import BookImage from './BookImage';
+import Button from './Button';
 
 type Props = { book?: Book };
 
@@ -118,10 +119,12 @@ export default function BookForm({ book }: Props) {
           onChange={e => setMemo(e.target.value)}
         />
 
-        <button type="submit" disabled={isLoading}>
-          {isNew && (isLoading ? '登録中...' : '登録')}
-          {!isNew && (isLoading ? '保存中...' : '変更を保存')}
-        </button>
+   <Button 
+     type='submit' 
+     disabled={isLoading} 
+     buttonText={isNew ? (isLoading ? '登録中...' : '登録') : (isLoading ? '保存中...' : '変更を保存')}
+   />
+          
       </form>
     </>
   );
