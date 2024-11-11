@@ -54,17 +54,20 @@ export default function Page() {
     }
   };
 
+  // memo : 読込中を入れても良さそう
+
   return (
     <>
       <h2>蔵書一覧</h2>
       <ul>
         {books.map(x => (
-          <li key={x.id} className='flex items-center py-2'>
-            <span className='mr-2'>{x.title}</span>
+          <li key={x.id} className="flex items-center py-2">
+            {/* memo : 本の画像の表示したい */}
+            <span className="mr-2">{x.title}</span>
             <Link href={`/book/${x.id}`}>
-              <Button buttonText='詳細'/>
+              <Button>詳細</Button>
             </Link>
-        <Button buttonText='削除' handleClick={()=>handleDelete(x)}/>
+            <Button onClick={() => handleDelete(x)}>削除</Button>
           </li>
         ))}
       </ul>

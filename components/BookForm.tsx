@@ -119,12 +119,15 @@ export default function BookForm({ book }: Props) {
           onChange={e => setMemo(e.target.value)}
         />
 
-   <Button 
-     type='submit' 
-     disabled={isLoading} 
-     buttonText={isNew ? (isLoading ? '登録中...' : '登録') : (isLoading ? '保存中...' : '変更を保存')}
-   />
-          
+        <Button type="submit" disabled={isLoading}>
+          {isNew
+            ? isLoading
+              ? '登録中...'
+              : '登録'
+            : isLoading
+            ? '保存中...'
+            : '変更を保存'}
+        </Button>
       </form>
     </>
   );
