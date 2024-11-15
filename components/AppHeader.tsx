@@ -19,7 +19,7 @@ export default function AppHeader() {
         <div>
           {user.email}
           {` / `}
-          <Button buttonText='ログアウト' handleClick={()=>signOut(auth)}/>
+          <Button onClick={() => signOut(auth)}>ログアウト</Button>
         </div>
       )}
     </header>

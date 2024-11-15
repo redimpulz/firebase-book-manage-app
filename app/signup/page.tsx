@@ -48,7 +48,7 @@ export default function Page() {
           required
         />
 
-        <Button buttonText='新規登録'></Button>
+        <Button>新規登録</Button>
         <Link href="/login">ログイン</Link>
       </form>
     </>
