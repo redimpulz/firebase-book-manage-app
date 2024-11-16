@@ -27,8 +27,9 @@ export default function Page() {
 
   return (
     <>
-      <h2>新規登録</h2>
-      <form onSubmit={handleSignUp} className="flex flex-col gap-1">
+    <div className='flex flex-col items-center'>
+    <h2>新規登録</h2>
+      <form onSubmit={handleSignUp} className='flex flex-col gap-2 items-center'>
         <input
           name="email"
           type="email"
@@ -48,9 +49,12 @@ export default function Page() {
           required
         />
 
-        <Button>新規登録</Button>
-        <Link href="/login">ログイン</Link>
+        <Button type='submit'>新規登録</Button>
+        <Link href="/login">
+        <Button>ログイン</Button>
+        </Link>
       </form>
+    </div>
     </>
   );
 }

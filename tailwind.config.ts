@@ -7,9 +7,9 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
   // memo : ここをコメントアウト
-  corePlugins: {
-    preflight: false
-  }
+  // corePlugins: {
+  //   preflight: false
+  // }
 };
 
 export default config;

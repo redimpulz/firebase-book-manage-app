@@ -27,16 +27,15 @@ export default function Page() {
 
   return (
     <>
-      <h2 className="text-center">ログイン</h2>
-
-      <form onSubmit={handleLogin} className="mx-auto w-1/2">
+     <div className='flex flex-col items-center'>
+     <h2 className="text-center">ログイン</h2>
+      <form onSubmit={handleLogin} className='flex flex-col items-center gap-2 mb-2'>
         <input
           name="email"
           type="email"
           placeholder="メールアドレス"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="w-full mb-2"
           required
         />
 
@@ -47,15 +46,15 @@ export default function Page() {
           value={password}
           onChange={e => setPassword(e.target.value)}
           minLength={8}
-          className="w-full mb-2"
           required
         />
 
-        <Button>ログイン</Button>
+        <Button type='submit'>ログイン</Button>
+          <Link href="/signup">
+            <Button>新規登録</Button>
+          </Link>
       </form>
-      <Link href="/signup" className="block text-center mt-2">
-        新規登録
-      </Link>
+     </div>
     </>
   );
 }

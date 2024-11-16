@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState, useContext } from 'react';
 import {
   collection,
@@ -18,7 +19,7 @@ import Button from '@/components/Button';
 
 export default function Page() {
   const [books, setBooks] = useState<Book[]>([]);
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useContext(AuthContext);
 
   const getBooks = async () => {
@@ -35,6 +36,8 @@ export default function Page() {
       setBooks(data);
     } catch (error) {
       console.error(error);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -54,25 +57,27 @@ export default function Page() {
     }
   };
 
-  // memo : 読込中を入れても良さそう
 
   return (
     <>
-      <h2>蔵書一覧</h2>
-      <ul>
+      <h2 className='text-center'>蔵書一覧</h2>
+      {isLoading && <div className='flex justify-center my-4'><div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent text-center"></div></div>}
+      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {books.map(x => (
-          <li key={x.id} className="flex items-center py-2">
-            {/* memo : 本の画像の表示したい */}
+          <li key={x.id} className="flex flex-col items-center py-2 bg-gray-300">
             <span className="mr-2">{x.title}</span>
-            <Link href={`/book/${x.id}`}>
-              <Button>詳細</Button>
+            <Image src={x.image ||'/200x283.png'} alt={x.title} width={200} height={283} className='mt-2' />
+            <div className='flex mt-2'>
+               <Link href={`/book/${x.id}`}>
+              <Button isLoading = {isLoading}>詳細</Button>
             </Link>
             <Button onClick={() => handleDelete(x)}>削除</Button>
+            </div>
           </li>
         ))}
       </ul>
-      <p>
-        <Link href="/book/new">本を追加</Link>
+      <p className='text-center mt-2'>
+        <Button><Link href="/book/new">本を追加</Link></Button>
       </p>
     </>
   );
