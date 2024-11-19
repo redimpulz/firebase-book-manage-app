@@ -29,8 +29,8 @@ export default function Page({ params }: { params: { bookId: string } }) {
 
   return (
     <>
-     <div className='flex flex-col items-center gap-2'>
-      <h2 className='my-2'>{book?.title}</h2>
+     <div className="flex flex-col items-center gap-2">
+      <h2 className="my-2">{book?.title}</h2>
       <BookImage src={book?.image || '/200x283.png'} />
       <dl>
         <dt>ISBN</dt>

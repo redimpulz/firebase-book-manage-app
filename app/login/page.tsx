@@ -27,7 +27,7 @@ export default function Page() {
 
   return (
     <>
-     <div className='flex flex-col items-center'>
+     <div className="flex flex-col items-center">
      <h2 className="text-center">ログイン</h2>
       <form onSubmit={handleLogin} className='flex flex-col items-center gap-2 mb-2'>
         <input
@@ -49,7 +49,7 @@ export default function Page() {
           required
         />
 
-        <Button type='submit'>ログイン</Button>
+        <Button type="submit">ログイン</Button>
           <Link href="/signup">
             <Button>新規登録</Button>
           </Link>

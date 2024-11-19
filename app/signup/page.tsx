@@ -2,10 +2,8 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase';
-
 import Button from '@/components/Button';
 
 export default function Page() {
@@ -27,9 +25,9 @@ export default function Page() {
 
   return (
     <>
-    <div className='flex flex-col items-center'>
+    <div className="flex flex-col items-center">
     <h2>新規登録</h2>
-      <form onSubmit={handleSignUp} className='flex flex-col gap-2 items-center'>
+      <form onSubmit={handleSignUp} className="flex flex-col gap-2 items-center">
         <input
           name="email"
           type="email"
@@ -49,7 +47,7 @@ export default function Page() {
           required
         />
 
-        <Button type='submit'>新規登録</Button>
+        <Button type="submit">新規登録</Button>
         <Link href="/login">
         <Button>ログイン</Button>
         </Link>

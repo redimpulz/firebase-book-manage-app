@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { bookId: string } }) {
 
   return (
     <>
-    <div className='flex flex-col items-center gap-2'>
+    <div className="flex flex-col items-center gap-2">
     <h2>本の編集</h2>
       <BookForm book={book} />
       <p>
