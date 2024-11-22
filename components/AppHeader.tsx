@@ -5,6 +5,8 @@ import { signOut } from 'firebase/auth';
 import { AuthContext } from '@/provider/AuthContext';
 import { auth } from '@/firebase';
 
+import Button from './Button';
+
 export default function AppHeader() {
   const { user } = useContext(AuthContext);
   const isLogin = !!user;
@@ -17,7 +19,7 @@ export default function AppHeader() {
         <div>
           {user.email}
           {` / `}
-          <button onClick={() => signOut(auth)}>ログアウト</button>
+          <Button onClick={() => signOut(auth)}>ログアウト</Button>
         </div>
       )}
     </header>

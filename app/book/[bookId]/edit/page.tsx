@@ -7,6 +7,7 @@ import { firestore } from '@/firebase';
 import { Book } from '@/types';
 
 import BookForm from '@/components/BookForm';
+import Button from '@/components/Button';
 
 export default function Page({ params }: { params: { bookId: string } }) {
   const { bookId } = params;
@@ -29,11 +30,13 @@ export default function Page({ params }: { params: { bookId: string } }) {
 
   return (
     <>
-      <h2>本の編集</h2>
-      <BookForm book={book} />
-      <p>
-        <Link href="/">一覧に戻る</Link>
-      </p>
+      <div className="flex flex-col">
+        <h2>本の編集</h2>
+        <BookForm book={book} />
+        <Link href="/" className="flex flex-col mt-2">
+          <Button>一覧に戻る</Button>
+        </Link>
+      </div>
     </>
   );
 }
