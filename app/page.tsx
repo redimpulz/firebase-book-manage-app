@@ -15,13 +15,17 @@ import { firestore } from '@/firebase';
 import { Book } from '@/types';
 import { AuthContext } from '@/provider/AuthContext';
 import Button from '@/components/Button';
+import Loading from '@/components/Loading';
+import BookItem from '@/components/BookItem';
 
 export default function Page() {
   const [books, setBooks] = useState<Book[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { user } = useContext(AuthContext);
 
   const getBooks = async () => {
+    setIsLoading(true);
     try {
       const q = query(
         collection(firestore, 'books'),
@@ -35,9 +39,8 @@ export default function Page() {
       setBooks(data);
     } catch (error) {
       console.error(error);
-    }finally{
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -56,27 +59,23 @@ export default function Page() {
     }
   };
 
-
   return (
     <>
       <h2 className="text-center">蔵書一覧</h2>
-      {isLoading && <div className="flex justify-center my-4"><div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent text-center"></div></div>}
+      {isLoading && (
+        <div className="flex justify-center my-4">
+          <Loading />
+        </div>
+      )}
       <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {books.map(x => (
-          <li key={x.id} className="flex flex-col items-center py-2 bg-gray-300">
-            <span className="mr-2">{x.title}</span>
-            <Image src={x.image ||'/200x283.png'} alt={x.title} width={200} height={283} className="mt-2"/>
-            <div className="flex mt-2">
-               <Link href={`/book/${x.id}`}>
-              <Button>詳細</Button>
-            </Link>
-            <Button onClick={() => handleDelete(x)}>削除</Button>
-            </div>
-          </li>
+          <BookItem key={x.id} book={x} onClickDelete={handleDelete} />
         ))}
       </ul>
       <p className="text-center mt-2">
-        <Button><Link href="/book/new">本を追加</Link></Button>
+        <Button>
+          <Link href="/book/new">本を追加</Link>
+        </Button>
       </p>
     </>
   );

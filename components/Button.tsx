@@ -1,12 +1,16 @@
-import { ButtonHTMLAttributes} from 'react';
+import { ButtonHTMLAttributes } from 'react';
+import clsx from 'clsx';
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement>
+type Props = ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button(props : Props) {
+export default function Button({ className, ...rest }: Props) {
   return (
     <button
-      className="bg-blue-500 text-white font-bold text-sm py-1 px-2 rounded-full  hover:bg-blue-700 hover:scale-105"
-      {...props}
-    ></button>
+      className={clsx(
+        'bg-blue-500 text-white font-bold text-sm py-1 px-2 rounded-full hover:bg-blue-700',
+        className
+      )}
+      {...rest}
+    />
   );
 }

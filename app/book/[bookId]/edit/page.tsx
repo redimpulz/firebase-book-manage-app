@@ -30,15 +30,13 @@ export default function Page({ params }: { params: { bookId: string } }) {
 
   return (
     <>
-    <div className="flex flex-col items-center gap-2">
-    <h2>本の編集</h2>
-      <BookForm book={book} />
-      <p>
-        <Link href="/">
-        <Button>一覧に戻る</Button>
+      <div className="flex flex-col">
+        <h2>本の編集</h2>
+        <BookForm book={book} />
+        <Link href="/" className="flex flex-col mt-2">
+          <Button>一覧に戻る</Button>
         </Link>
-      </p>
-    </div>
+      </div>
     </>
   );
 }

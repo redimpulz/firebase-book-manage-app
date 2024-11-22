@@ -85,7 +85,7 @@ export default function BookForm({ book }: Props) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 items-center">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <label htmlFor="title">タイトル</label>
         <input
           id="title"
