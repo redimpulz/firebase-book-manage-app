@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState, useContext } from 'react';
 import {
   collection,
@@ -13,13 +14,18 @@ import {
 import { firestore } from '@/firebase';
 import { Book } from '@/types';
 import { AuthContext } from '@/provider/AuthContext';
+import Button from '@/components/Button';
+import Loading from '@/components/Loading';
+import BookItem from '@/components/BookItem';
 
 export default function Page() {
   const [books, setBooks] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { user } = useContext(AuthContext);
 
   const getBooks = async () => {
+    setIsLoading(true);
     try {
       const q = query(
         collection(firestore, 'books'),
@@ -34,6 +40,7 @@ export default function Page() {
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -54,24 +61,22 @@ export default function Page() {
 
   return (
     <>
-      <h2>蔵書一覧</h2>
-      <ul>
-        {books.map(x => (
-          <li key={x.id}>
-            <span>{x.title}</span>
-
-            <Link href={`/book/${x.id}`}>
-              <button>詳細</button>
-            </Link>
-            <button type="button" onClick={() => handleDelete(x)}>
-              削除
-            </button>
-          </li>
-        ))}
-      </ul>
-      <p>
-        <Link href="/book/new">本を追加</Link>
-      </p>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-center">蔵書一覧</h2>
+        {isLoading && (
+          <div className="flex justify-center my-4">
+            <Loading />
+          </div>
+        )}
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
+          {books.map(x => (
+            <BookItem key={x.id} book={x} onClickDelete={handleDelete} />
+          ))}
+        </ul>
+        <Link href="/book/new" className="flex flex-col">
+          <Button>本を追加</Button>
+        </Link>
+      </div>
     </>
   );
 }

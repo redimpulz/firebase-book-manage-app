@@ -2,9 +2,9 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase';
+import Button from '@/components/Button';
 
 export default function Page() {
   const { push } = useRouter();
@@ -25,30 +25,34 @@ export default function Page() {
 
   return (
     <>
-      <h2>新規登録</h2>
-      <form onSubmit={handleSignUp} className="flex flex-col gap-1">
-        <input
-          name="email"
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+      <div className="flex flex-col">
+        <h2>新規登録</h2>
+        <form onSubmit={handleSignUp} className="flex flex-col gap-2">
+          <input
+            name="email"
+            type="email"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          name="password"
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          minLength={8}
-          required
-        />
+          <input
+            name="password"
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            minLength={8}
+            required
+          />
 
-        <button type="submit">新規登録</button>
-        <Link href="/login">ログイン</Link>
-      </form>
+          <Button type="submit">新規登録</Button>
+          <Link href="/login" className="flex flex-col">
+            <Button>ログイン</Button>
+          </Link>
+        </form>
+      </div>
     </>
   );
 }
