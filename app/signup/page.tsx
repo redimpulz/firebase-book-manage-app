@@ -25,34 +25,34 @@ export default function Page() {
 
   return (
     <>
-    <div className="flex flex-col items-center">
-    <h2>新規登録</h2>
-      <form onSubmit={handleSignUp} className="flex flex-col gap-2 items-center">
-        <input
-          name="email"
-          type="email"
-          placeholder="メールアドレス"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+      <div className="flex flex-col">
+        <h2>新規登録</h2>
+        <form onSubmit={handleSignUp} className="flex flex-col gap-2">
+          <input
+            name="email"
+            type="email"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          name="password"
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          minLength={8}
-          required
-        />
+          <input
+            name="password"
+            type="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            minLength={8}
+            required
+          />
 
-        <Button type="submit">新規登録</Button>
-        <Link href="/login">
-        <Button>ログイン</Button>
-        </Link>
-      </form>
-    </div>
+          <Button type="submit">新規登録</Button>
+          <Link href="/login" className="flex flex-col">
+            <Button>ログイン</Button>
+          </Link>
+        </form>
+      </div>
     </>
   );
 }

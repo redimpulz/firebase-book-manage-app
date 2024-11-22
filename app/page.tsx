@@ -61,22 +61,22 @@ export default function Page() {
 
   return (
     <>
-      <h2 className="text-center">蔵書一覧</h2>
-      {isLoading && (
-        <div className="flex justify-center my-4">
-          <Loading />
-        </div>
-      )}
-      <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {books.map(x => (
-          <BookItem key={x.id} book={x} onClickDelete={handleDelete} />
-        ))}
-      </ul>
-      <p className="text-center mt-2">
-        <Button>
-          <Link href="/book/new">本を追加</Link>
-        </Button>
-      </p>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-center">蔵書一覧</h2>
+        {isLoading && (
+          <div className="flex justify-center my-4">
+            <Loading />
+          </div>
+        )}
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 ">
+          {books.map(x => (
+            <BookItem key={x.id} book={x} onClickDelete={handleDelete} />
+          ))}
+        </ul>
+        <Link href="/book/new" className="flex flex-col">
+          <Button>本を追加</Button>
+        </Link>
+      </div>
     </>
   );
 }
